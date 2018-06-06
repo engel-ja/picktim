@@ -1,0 +1,33 @@
+{
+  "name": "picktim",
+  "authors": [
+    "JA Engelbrecht <engel13ad@gmail.com>"
+  ],
+  "version": "0.0.1",
+  "description": "Basic JQuery Timepicker plugin",
+  "main": "js/picktim.js",
+  "keywords": [
+    "plugin",
+    "jquery",
+    "timepicker",
+    "time"
+  ],
+  "dependencies": {
+        "jquery": ">=2.2.4",
+        "font-awesome": "^4.7"
+    },
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "git://gitlab.com/engel.ja/picktim.git"
+    }
+
+}
