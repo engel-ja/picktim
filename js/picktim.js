@@ -121,7 +121,7 @@
     this.cTable.midRow.c2.text(':');
     this.cTable.midRow.c2.addClass('picktim-separator picktim-symbol');
     this.incHours = $('<i>');
-    this.incHours.addClass('btn picktim-btn picktim-symbol');
+    this.incHours.addClass('picktim-btn picktim-symbol');
     this.incHours.addClass(this.settings.icons.up);
     this.incHours.on('mousedown touchstart', $.proxy(function (e) {
         this.incrementHours();
@@ -135,7 +135,7 @@
     },this));
     this.cTable.topRow.c1.append(this.incHours);
     this.decHours = $('<i>');
-    this.decHours.addClass('btn picktim-btn picktim-symbol');
+    this.decHours.addClass('picktim-btn picktim-symbol');
     this.decHours.addClass(this.settings.icons.down);
     this.decHours.on('mousedown touchstart', $.proxy(function (e) {
         this.decrementHours();
@@ -149,7 +149,7 @@
     },this));
     this.cTable.botRow.c1.append(this.decHours);
     this.incMins = $('<i>');
-    this.incMins.addClass('btn picktim-btn picktim-symbol');
+    this.incMins.addClass('picktim-btn picktim-symbol');
     this.incMins.addClass(this.settings.icons.up);
     this.incMins.on('mousedown touchstart', $.proxy(function (e) {
         this.incrementMinutes();
@@ -163,7 +163,7 @@
     },this));
     this.cTable.topRow.c3.append(this.incMins);
     this.decMins = $('<i>');
-    this.decMins.addClass('btn picktim-btn picktim-symbol');
+    this.decMins.addClass('picktim-btn picktim-symbol');
     this.decMins.addClass(this.settings.icons.down);
     this.decMins.on('mousedown touchstart', $.proxy(function (e) {
         this.decrementMinutes();
@@ -177,7 +177,7 @@
     },this));
     this.cTable.botRow.c3.append(this.decMins);
     this.clearBtn = $('<i>')
-    this.clearBtn.addClass('btn picktim-clear');
+    this.clearBtn.addClass('picktim-clear');
     this.clearBtn.addClass(this.settings.icons.clear);
     this.$element.append(this.clearBtn);
     this.clearBtn.css({
@@ -188,7 +188,7 @@
     },this));
     this.ampm = $('<div>');
     if (this.settings.mode === this.MODES.h12)
-        this.ampm.addClass('btn picktim-ampm');
+        this.ampm.addClass('picktim-btn picktim-ampm');
     this.cTable.midRow.c4.append(this.ampm);
     if (this.settings.mode === this.MODES.h24)
     {
