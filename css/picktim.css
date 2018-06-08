@@ -59,7 +59,7 @@
 
 .picktim-btn{
     cursor: pointer;
-    width: 50px;
+    width: 50px !important;
     border-radius: 3px;
     -webkit-box-shadow: none;
     box-shadow: none;
