@@ -63,6 +63,8 @@
         this.setDefaultValue('00:00');
     }
     this.incrementInterval = 150;
+    this.incrementUpCount = 0;
+    this.incrementValue = 1;
 
     // setup structure. Internal elements referenced for easier customization
     this.position = $(this).offset();
@@ -127,11 +129,22 @@
         this.incrementHours();
         this.tHours.addClass('active');
         this.timeouts.iH = setInterval($.proxy(function () {
-            this.incrementHours();
+            this.incrementHours(this.incrementValue);
+            if (this.incrementUpCount < 5)
+            {
+                this.incrementUpCount ++;
+            }
+            else if (this.incrementUpCount === 5)
+            {
+                this.incrementValue = 5;
+                this.incrementUpCount ++;
+            }
         },this), this.incrementInterval);
     },this)).bind('mouseup mouseleave touchend', $.proxy(function () {
         this.tHours.removeClass('active');
         clearInterval(this.timeouts.iH);
+        this.incrementUpCount = 0;
+        this.incrementValue = 1;
     },this));
     this.cTable.topRow.c1.append(this.incHours);
     this.decHours = $('<i>');
@@ -141,11 +154,22 @@
         this.decrementHours();
         this.tHours.addClass('active');
         this.timeouts.dH = setInterval($.proxy(function () {
-            this.decrementHours();
+            this.decrementHours(this.incrementValue);
+            if (this.incrementUpCount < 5)
+            {
+                this.incrementUpCount ++;
+            }
+            else if (this.incrementUpCount === 5)
+            {
+                this.incrementValue = 5;
+                this.incrementUpCount ++;
+            }
         },this), this.incrementInterval);
     },this)).bind('mouseup mouseleave touchend', $.proxy(function () {
         this.tHours.removeClass('active');
         clearInterval(this.timeouts.dH);
+        this.incrementUpCount = 0;
+        this.incrementValue = 1;
     },this));
     this.cTable.botRow.c1.append(this.decHours);
     this.incMins = $('<i>');
@@ -155,11 +179,22 @@
         this.incrementMinutes();
         this.tMins.addClass('active');
         this.timeouts.iM = setInterval($.proxy(function () {
-            this.incrementMinutes();
+            this.incrementMinutes(this.incrementValue);
+            if (this.incrementUpCount < 5)
+            {
+                this.incrementUpCount ++;
+            }
+            else if (this.incrementUpCount === 5)
+            {
+                this.incrementValue = 5;
+                this.incrementUpCount ++;
+            }
         },this), this.incrementInterval);
     },this)).bind('mouseup mouseleave touchend', $.proxy(function () {
         this.tMins.removeClass('active');
         clearInterval(this.timeouts.iM);
+        this.incrementUpCount = 0;
+        this.incrementValue = 1;
     },this));
     this.cTable.topRow.c3.append(this.incMins);
     this.decMins = $('<i>');
@@ -169,11 +204,22 @@
         this.decrementMinutes();
         this.tMins.addClass('active');
         this.timeouts.dM = setInterval($.proxy(function () {
-            this.decrementMinutes();
+            this.decrementMinutes(this.incrementValue);
+            if (this.incrementUpCount < 5)
+            {
+                this.incrementUpCount ++;
+            }
+            else if (this.incrementUpCount === 5)
+            {
+                this.incrementValue = 5;
+                this.incrementUpCount ++;
+            }
         },this), this.incrementInterval);
     },this)).bind('mouseup mouseleave touchend', $.proxy(function () {
         this.tMins.removeClass('active');
         clearInterval(this.timeouts.dM);
+        this.incrementUpCount = 0;
+        this.incrementValue = 1;
     },this));
     this.cTable.botRow.c3.append(this.decMins);
     this.clearBtn = $('<i>')
@@ -467,86 +513,95 @@ Plugin.prototype.validTime = function(n){
     return true;
 }
 
+/** Increment/Decrement -- Limit
+* v -> value to be in/decremented
+* boolean inc -> specifies whether number should be incremented (true) or decremented (false)
+* i -> increment value
+* lim -> specifies the limit at which the operation should wrap around
+*/
+Plugin.prototype.iDL = function(v, inc, i, lim)
+{
+    if (inc)
+    {       // increment
+        if (v == lim - 1 || isNaN(v) || v == '')
+        {
+            return 0;
+        }
+        else{
+            if (i !== null && typeof i !== 'undefined')
+            {
+                if (parseInt(v) + i > lim - 1)
+                {
+                    return parseInt(v) + i - lim;
+                }
+                else {
+                    return parseInt(v) + i;
+                }
+            }
+            else{
+                return parseInt(v) + 1;
+            }
+        }
+    }
+    else{      // decrement
+        if (v == 0 || isNaN(v) || v == '')
+        {
+            return lim - 1;
+        }
+        else{
+            if (i !== null && typeof i !== 'undefined')
+            {
+                if (parseInt(v) - i < 0)
+                {
+                    return parseInt(v) - i + lim;
+                }
+                else {
+                    return parseInt(v) - i;
+                }
+            }
+            else{
+                return parseInt(v) - 1;
+            }
+        }
+    }
+
+}
+
 // Increment popup hours
 Plugin.prototype.incrementHours = function(e){
 
     if (this.settings.mode === this.MODES.h24)
     {
-        if (this.tHours.val() == 23 || isNaN(this.tHours.val()) || this.tHours.val() == '')
-        {
-            this.tHours.val(0);
-            this.tHours.trigger('change');
-        }
-        else {
-            this.tHours.val(parseInt(this.tHours.val()) + 1);
-            this.tHours.trigger('change');
-        }
+        this.tHours.val(this.iDL(this.tHours.val(), true, e, 24));
     }
     else {
-        if (this.tHours.val() == 11 || isNaN(this.tHours.val()) || this.tHours.val() == '')
-        {
-            this.tHours.val(0);
-            this.tHours.trigger('change');
-        }
-        else {
-            this.tHours.val(parseInt(this.tHours.val()) + 1);
-            this.tHours.trigger('change');
-        }
+        this.tHours.val(this.iDL(this.tHours.val(), true, e, 12));
     }
-
+    this.tHours.trigger('change');
 };
 
 // Decrement popup hours
 Plugin.prototype.decrementHours = function(e){
     if (this.settings.mode === this.MODES.h24)
     {
-        if (this.tHours.val() == 0 || isNaN(this.tHours.val()) || this.tHours.val() == '')
-        {
-            this.tHours.val(23);
-            this.tHours.trigger('change');
-        }
-        else {
-            this.tHours.val(parseInt(this.tHours.val()) - 1);
-            this.tHours.trigger('change');
-        }
+        this.tHours.val(this.iDL(this.tHours.val(), false, e, 24));
     }
     else {
-        if (this.tHours.val() == 0 || isNaN(this.tHours.val()) || this.tHours.val() == '')
-        {
-            this.tHours.val(11);
-            this.tHours.trigger('change');
-        }
-        else {
-            this.tHours.val(parseInt(this.tHours.val()) - 1);
-            this.tHours.trigger('change');
-        }
+        this.tHours.val(this.iDL(this.tHours.val(), false, e, 12));
     }
+    this.tHours.trigger('change');
 };
 
 // Increment popup minutes
 Plugin.prototype.incrementMinutes = function(e){
-    if (this.tMins.val() == 59 || isNaN(this.tMins.val()) || this.tMins.val() == '')
-    {
-        this.tMins.val(0);
-        this.tMins.trigger('change');
-    }
-    else {
-        this.tMins.val(parseInt(this.tMins.val()) + 1);
-        this.tMins.trigger('change');
-    }
+    this.tMins.val(this.iDL(this.tMins.val(), true, e, 60));
+    this.tMins.trigger('change');
 };
 
 // Decrement popup minutes
 Plugin.prototype.decrementMinutes = function(e){
-    if (this.tMins.val() == 0 || isNaN(this.tMins.val()) || this.tMins.val() == '')
-    {
-        this.tMins.val(59);
-        this.tMins.trigger('change');
-    }
-    else {
-        this.tMins.val(parseInt(this.tMins.val()) - 1);
-        this.tMins.trigger('change');
-    }
+    this.tMins.val(this.iDL(this.tMins.val(), false, e, 60));
+    this.tMins.trigger('change');
 };
 
 // Setter method for defaultValue
